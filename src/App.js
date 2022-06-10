@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
+import { ValidatorUtils } from '@xcfed/utils';
 
+console.log(1,ValidatorUtils)
 function App() {
   return (
     <div className="App">
