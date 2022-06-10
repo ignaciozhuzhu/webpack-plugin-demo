@@ -1,9 +1,6 @@
-const replacePath  = require("../../bin/local-packages");
-
 class CopyrightWebpackPlugin {
   constructor(options) {
     console.log(`恭喜: 作者是${options.auth}的插件被您使用了! `);
-    replacePath()
   }
   apply(compiler) {
     compiler.hooks.compile.tap("CopyrightWebpackPlugin", (compilation) => {
