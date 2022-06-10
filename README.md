@@ -1,8 +1,4 @@
-# 在start前要先prestart
-
-hehe.....
-
-## he
+# before start, run prestart first
 
 In the project directory, you can run:
 
