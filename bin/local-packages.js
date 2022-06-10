@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const util = require('util');
+const util = require("util");
 //const writeFile = require('node:fs');
-const fs = require('fs');
-const path = require('node:path');
-const exec = util.promisify(require('child_process').exec);
+const fs = require("fs");
+const path = require("node:path");
+const exec = util.promisify(require("child_process").exec);
 
 const COMMANDS = {
   findPackageJsons: `find "$(pwd)" -name "package.json"`,
@@ -11,11 +11,11 @@ const COMMANDS = {
 
 const PACKAGE_JSON_MAPPING = {};
 
-KEYS = ['dependencies', 'devDependencies', 'peerDependencies', 'resolutions'];
+KEYS = ["dependencies", "devDependencies", "peerDependencies", "resolutions"];
 
 async function findPackageJsonPaths() {
   const { stdout, stderr } = await exec(COMMANDS.findPackageJsons);
-  return stdout.split('\n').filter(Boolean);
+  return stdout.split("\n").filter(Boolean);
 }
 
 function getPkgName(path) {
@@ -30,16 +30,21 @@ function getPkgName(path) {
 
 async function generateMapping() {
   const paths = await findPackageJsonPaths();
-	//console.log(3,paths)
+  //console.log(3,paths)
   paths.forEach((path) => {
     const name = getPkgName(path);
-   // if (name && name.startsWith('@') && !name.includes('%')) {
-     if (name && !name.includes('%')) {
-	  PACKAGE_JSON_MAPPING[name] = path;
+    if (
+      (name && name.startsWith("@xcfed") && !name.includes("%")) ||
+      name === "my-app"
+    ) {
+      //	    console.log(55,name)
+
+      //  if (name && !name.includes('%')) {
+      PACKAGE_JSON_MAPPING[name] = path;
     }
   });
 
-/*  const data = new Uint8Array(Buffer.from(JSON.stringify(PACKAGE_JSON_MAPPING, null, 2)));
+  /*  const data = new Uint8Array(Buffer.from(JSON.stringify(PACKAGE_JSON_MAPPING, null, 2)));
   fs.writeFile('aa.txt', data, (err) => {
     if (err) throw err;
     console.log('The file has been saved!');
@@ -60,16 +65,16 @@ function mapPackageNameToPackageDir(packageName) {
 async function main() {
   await generateMapping();
 
-  const packageJsonPath = process.argv.pop();
+  const packageJsonPath = "package.json"; // process.argv.pop();
   const packageJsonContent = fs.readFileSync(packageJsonPath);
   const parsed = JSON.parse(packageJsonContent);
-  //console.log(11111,PACKAGE_JSON_MAPPING)
+  // console.log(11111,parsed)
   KEYS.forEach((key) => {
     if (parsed[key]) {
       //  Object.keys(parsed[key]).forEach((dependencyKey) => {
       Object.keys(PACKAGE_JSON_MAPPING).forEach((dependencyKey) => {
         const pkgDir = mapPackageNameToPackageDir(dependencyKey);
-        const pkgDir2 = pkgDir + '/package.json';
+        const pkgDir2 = pkgDir + "/package.json";
         if (pkgDir) {
           const packageJsonContent1 = fs.readFileSync(pkgDir2);
           const parsed2 = JSON.parse(packageJsonContent1);
@@ -79,16 +84,21 @@ async function main() {
               Object.keys(parsed2[key]).forEach((dependencyKey) => {
                 const pkgDir = mapPackageNameToPackageDir(dependencyKey);
                 if (pkgDir) {
-                  parsed2[key][dependencyKey] = `file:${path.relative(path.dirname(pkgDir2), pkgDir)}`;
+                  parsed2[key][dependencyKey] = `file:${path.relative(
+                    path.dirname(pkgDir2),
+                    pkgDir
+                  )}`;
                 }
               });
             }
           });
-	//console.log(22,parsed2,pkgDir2,PACKAGE_JSON_MAPPING)
-          const data = new Uint8Array(Buffer.from(JSON.stringify(parsed2, null, 2)));
+          //console.log(22,parsed2,pkgDir2,PACKAGE_JSON_MAPPING)
+          const data = new Uint8Array(
+            Buffer.from(JSON.stringify(parsed2, null, 2))
+          );
           fs.writeFile(pkgDir2, data, (err) => {
             if (err) throw err;
-            console.log('The file has been saved!');
+            console.log("The file has been saved!");
           });
         }
       });
@@ -101,4 +111,4 @@ async function main() {
 
 //main();
 
-module.exports = main
+module.exports = main;
