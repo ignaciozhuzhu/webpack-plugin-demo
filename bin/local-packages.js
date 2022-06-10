@@ -57,7 +57,7 @@ function mapPackageNameToPackageDir(packageName) {
   return packageDir;
 }
 
-export async function main() {
+async function main() {
   await generateMapping();
 
   const packageJsonPath = process.argv.pop();
@@ -99,4 +99,6 @@ export async function main() {
   // process.stdout.write(JSON.stringify(parsed2, null, 2))
 }
 
-main();
+//main();
+
+module.exports = main

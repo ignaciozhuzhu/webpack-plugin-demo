@@ -1,6 +1,10 @@
+const aaa = require('../../bin/local-packages');
+//console.log(444,aaa())
+
 class CopyrightWebpackPlugin {
     constructor (options) {
       console.log(`恭喜: 作者是${options.auth}的插件被您使用了! `)
+      aaa()
     }
     apply (compiler) {
         compiler.hooks.compile.tap('CopyrightWebpackPlugin', compilation => {
