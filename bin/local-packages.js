@@ -98,7 +98,7 @@ async function main() {
           );
           fs.writeFile(pkgDir2, data, (err) => {
             if (err) throw err;
-            console.log("The file has been saved!");
+            console.log(`The file ${pkgDir2} has been changed! You may should be reinstall packages`);
           });
         }
       });
