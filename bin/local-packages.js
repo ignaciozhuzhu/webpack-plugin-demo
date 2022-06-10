@@ -30,10 +30,12 @@ function getPkgName(path) {
 
 async function generateMapping() {
   const paths = await findPackageJsonPaths();
+	//console.log(3,paths)
   paths.forEach((path) => {
     const name = getPkgName(path);
-    if (name && name.startsWith('@') && !name.includes('%')) {
-      PACKAGE_JSON_MAPPING[name] = path;
+   // if (name && name.startsWith('@') && !name.includes('%')) {
+     if (name && !name.includes('%')) {
+	  PACKAGE_JSON_MAPPING[name] = path;
     }
   });
 
@@ -55,7 +57,7 @@ function mapPackageNameToPackageDir(packageName) {
   return packageDir;
 }
 
-async function main() {
+export async function main() {
   await generateMapping();
 
   const packageJsonPath = process.argv.pop();
@@ -82,7 +84,7 @@ async function main() {
               });
             }
           });
-
+	//console.log(22,parsed2,pkgDir2,PACKAGE_JSON_MAPPING)
           const data = new Uint8Array(Buffer.from(JSON.stringify(parsed2, null, 2)));
           fs.writeFile(pkgDir2, data, (err) => {
             if (err) throw err;
